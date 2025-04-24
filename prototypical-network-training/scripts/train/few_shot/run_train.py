@@ -6,13 +6,14 @@ Link: https://github.com/jakesnell/prototypical-networks
 import argparse
 import json
 from train import main
+import os
 
 parser = argparse.ArgumentParser(description='Train prototypical networks')
 
-default_dataset = '[DATASET_PATH_HERE]'
+default_dataset = os.path.join(os.path.dirname(__file__), '../../../datasets/combined_ds')
 num_classes = 2
 parser.add_argument('--data.dataset', type=str, default=default_dataset, metavar='DS',
-                    help="data set name (default: {:s})".format(default_dataset))
+                    help="data set name (default: combined_ds)")
 default_split = 'vinyals'
 parser.add_argument('--data.split', type=str, default=default_split, metavar='SP',
                     help="split name (default: {:s})".format(default_split))

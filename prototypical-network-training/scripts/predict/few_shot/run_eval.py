@@ -4,12 +4,13 @@ Link: https://github.com/jakesnell/prototypical-networks
 """
 
 import argparse
-
+import os
 from eval import main
 
 parser = argparse.ArgumentParser(description='Evaluate few-shot prototypical networks')
 
 default_model_path = 'results/std-cnn/best_model.pt'
+default_dataset = os.path.join(os.path.dirname(__file__), '../../../datasets/combined_ds')
 parser.add_argument('--model.model_path', type=str, default=default_model_path, metavar='MODELPATH',
                     help="location of pretrained model to evaluate (default: {:s})".format(default_model_path))
 model_options_path = 'results/std-cnn/opt.json'
@@ -24,7 +25,7 @@ parser.add_argument('--data.test_query', type=int, default=15, metavar='TESTQUER
                     help="number of query examples per class in test. 0 means same as model's data.query (default: 0)")
 parser.add_argument('--data.test_episodes', type=int, default=1000, metavar='NTEST',
                     help="number of test episodes per epoch (default: 1000)")
-parser.add_argument('--data.dataset', type=str, default='[DATASET_PATH_HERE]', metavar='DS')
+parser.add_argument('--data.dataset', type=str, default=default_dataset, metavar='DS')
 parser.add_argument('--f1', action='store_true', help="Compute F1 score")
 
 args = vars(parser.parse_args())

@@ -21,7 +21,7 @@ dataset_name_mapping = {
     'Printing_Dataset': '[4] Beyer, 2024 Dataset (unfiltered)'
 }
 
-data_root = os.path.join(os.path.dirname(__file__), 'data')
+data_root = os.path.join(os.path.dirname(__file__), '../datasets/')
 detection_threshold = 0.25
 nms_threshold = 0.0
 
