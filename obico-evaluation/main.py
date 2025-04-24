@@ -21,7 +21,6 @@ dataset_name_mapping = {
     'Printing_Dataset': '[4] Beyer, 2024 Dataset (unfiltered)'
 }
 
-# define data root and detection parameters
 data_root = os.path.join(os.path.dirname(__file__), 'data')
 detection_threshold = 0.25
 nms_threshold = 0.0
@@ -30,10 +29,8 @@ net_main_1 = load_net(model_cfg, model_meta, model_weights)
 
 eval_datasets = ["reduced_ds", "3D_fault_dataset", "combined_ds", "Printing_Dataset"]
 
-# prepare image transform to convert PIL to BGR numpy
 image_transform = transforms.Lambda(lambda img: cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR))  # type: ignore
 
-# initialize global metrics
 global_total = 0
 global_correct = 0
 global_loss_sum = 0.0
@@ -41,7 +38,6 @@ positive_label = 'failure'
 global_TP = global_FP = global_FN = 0
 global_time_sum = 0.0
 
-# evaluate across datasets
 for ds_name in eval_datasets:
     ds_path = os.path.join(data_root, ds_name)
     dataset = ImageFolder(ds_path, transform=image_transform)
@@ -56,9 +52,9 @@ for ds_name in eval_datasets:
         dataset, [train_size, val_size, test_size],
         generator=torch.Generator().manual_seed(42)
     )
-    
+
     loader = DataLoader(test_dataset, batch_size=1, shuffle=False, collate_fn=lambda x: x)
-    
+
     ds_start = time.time()
     total = correct = 0
     loss_sum = 0.0
@@ -69,17 +65,14 @@ for ds_name in eval_datasets:
         total += 1
         dets = detect(net_main_1, image, thresh=detection_threshold, nms=nms_threshold)
         truth = dataset.classes[label]
-        # score for true class
         scores = [conf for (name, conf, _) in dets if name == truth]
         score_truth = max(scores) if scores else 0.0
-        # prediction based on max confidence
         if dets:
             pred, pred_conf, _ = max(dets, key=lambda x: x[1])
         else:
             pred, pred_conf = 'success', 0.0
         if pred == truth:
             correct += 1
-        # update confusion counts for F1
         if pred == positive_label and truth == positive_label:
             tp += 1
         elif pred == positive_label and truth != positive_label:
@@ -87,32 +80,26 @@ for ds_name in eval_datasets:
         elif pred != positive_label and truth == positive_label:
             fn += 1
         loss_sum += -math.log(score_truth + eps)
-    # end of loader loop
     ds_end = time.time()
     ds_duration = ds_end - ds_start if (ds_end - ds_start) > 0 else eps
     global_time_sum += ds_duration
     acc = correct / total if total else 0
     avg_loss = loss_sum / total if total else 0
-    # update global metrics
     global_total += total
     global_correct += correct
     global_loss_sum += loss_sum
-    # compute dataset precision, recall, F1
     precision = tp / (tp + fp) if (tp + fp) else 0
     recall = tp / (tp + fn) if (tp + fn) else 0
     f1 = (2 * precision * recall / (precision + recall)) if (precision + recall) else 0
-    # update global confusion
     global_TP += tp
     global_FP += fp
     global_FN += fn
     throughput_ds = total / ds_duration
     print(f"Dataset {ds_name}: Accuracy: {acc:.4f}, Loss: {avg_loss:.4f}, F1: {f1:.4f}, Throughput: {throughput_ds:.2f} img/s")
 
-# compute and print overall metrics
 overall_acc = global_correct / global_total if global_total else 0
 overall_loss = global_loss_sum / global_total if global_total else 0
 print(f"Overall: Accuracy: {overall_acc:.4f}, Loss: {overall_loss:.4f}")
-# compute and print overall precision, recall, F1
 overall_precision = global_TP / (global_TP + global_FP) if (global_TP + global_FP) else 0
 overall_recall = global_TP / (global_TP + global_FN) if (global_TP + global_FN) else 0
 overall_f1 = (2 * overall_precision * overall_recall / (overall_precision + overall_recall)) if (overall_precision + overall_recall) else 0
