@@ -1,5 +1,5 @@
-# Few-shot learning for Real-Time Additive Manufacturing Fault Detection on Edge Devices
-This repository contains code for training and evaluating Prototypical Networks (and fine-tuning feature extractors) as seen in the research paper "_Few-shot learning for Real-Time Additive Manufacturing Fault Detection on Edge Devices_" by Oliver Bravery.
+# Few-shot Classification for Real-time Additive Manufacturing Fault Detection on Edge Devices
+This repository contains code for training and evaluating Prototypical Networks (and fine-tuning feature extractors) as seen in the research paper "_Few-shot Classification for Real-time Additive Manufacturing Fault Detection on Edge Devices_" by Oliver Bravery.
 
 ## Quick Start
 1. Ensure all datasets are downloaded and prepared. Instructions for downloading and preparing the datasets used for training the 3D fault detection model can be found [here](#dataset-preparation).
@@ -10,7 +10,7 @@ This repository contains code for training and evaluating Prototypical Networks 
 - For evaluating the Obico Spaghetti Detection Model, refer to [these instructions](./obico-evaluation/README.md).
 
 ## Dataset Preparation
-The datasets used in the research 
+The datasets used in the research are available on various platforms. The following steps outline how to download and prepare these datasets for use in the project:
 
 1. Download the datasets from the following sources, extract them and placing them in `datasets/downloads`, naming them as follows:
 
