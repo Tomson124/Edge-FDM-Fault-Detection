@@ -1,6 +1,8 @@
 # Few-shot Classification for Real-time Additive Manufacturing Fault Detection on Edge Devices
 This repository contains code for training and evaluating Prototypical Networks (and fine-tuning feature extractors) as seen in the research paper "_Few-shot Classification for Real-time Additive Manufacturing Fault Detection on Edge Devices_" by Oliver Bravery.
 
+> _You can find the technical paper [here](dissertation.pdf). Please note that the paper is structured as a dissertation, which may differ from typical research papers in terms of structure and content. I plan to revise it into a preprint and publish to arXiv in the future._
+
 ## Quick Start
 1. Ensure all datasets are downloaded and prepared. Instructions for downloading and preparing the datasets used for training the 3D fault detection model can be found [here](#dataset-preparation).
 
